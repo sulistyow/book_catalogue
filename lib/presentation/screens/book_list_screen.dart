@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../business_logic/bloc/book_bloc.dart';
@@ -6,6 +5,7 @@ import '../../business_logic/bloc/book_event.dart';
 import '../../business_logic/bloc/book_state.dart';
 import '../../data/repositories/book_repository.dart';
 import '../widgets/error_view.dart';
+import '../widgets/book_card.dart';
 import 'book_detail_screen.dart';
 
 class BookListScreen extends StatefulWidget {
@@ -25,16 +25,22 @@ class _BookListScreenState extends State<BookListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Simple Book Explorer')),
+      appBar: AppBar(title: const Text('Book Explorer')),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Search books by title...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search, color: Colors.orange),
+                filled: true,
+                fillColor: Colors.orange[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 0),
               ),
               onChanged: (query) {
                 context.read<BookBloc>().add(SearchBooks(query));
@@ -51,25 +57,19 @@ class _BookListScreenState extends State<BookListScreen> {
                   if (books.isEmpty) {
                     return const Center(child: Text('No books found.'));
                   }
-                  return ListView.builder(
+                  return GridView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.65,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                    ),
                     itemCount: books.length,
                     itemBuilder: (context, index) {
                       final book = books[index];
-                      return ListTile(
-                        leading: CachedNetworkImage(
-                          imageUrl: book.coverUrl,
-                          width: 50,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.book),
-                        ),
-                        title: Text(book.title),
-                        subtitle: Text(
-                          '${book.authors.isNotEmpty ? book.authors.first : 'Unknown Author'}'
-                          '${book.firstPublishYear != null ? ' (${book.firstPublishYear})' : ''}',
-                        ),
+                      return BookCard(
+                        book: book,
                         onTap: () {
                           Navigator.push(
                             context,

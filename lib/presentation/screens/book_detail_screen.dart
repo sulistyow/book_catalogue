@@ -44,27 +44,46 @@ class BookDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CachedNetworkImage(
-                  imageUrl: book.coverUrl,
-                  height: 300,
-                  placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                Hero(
+                  tag: 'cover_${book.key}',
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(32),
+                      bottomRight: Radius.circular(32),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: book.coverUrl,
+                      height: 350,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.error,
+                        size: 50,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         book.title,
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange[800],
+                            ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'By: ${book.authors.isNotEmpty ? book.authors.join(", ") : "Unknown Author"}',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontStyle: FontStyle.italic),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.grey[700],
+                            ),
                       ),
                       const SizedBox(height: 24),
                       _buildDetailContent(context, state),
@@ -118,7 +137,7 @@ class BookDetailScreen extends StatelessWidget {
             Wrap(
               spacing: 8.0,
               runSpacing: 4.0,
-              children: detail.subjects
+              children: detail.subjects.take(4)
                   .map((subject) => Chip(label: Text(subject)))
                   .toList(),
             ),

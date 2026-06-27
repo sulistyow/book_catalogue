@@ -49,8 +49,34 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          title: 'Simple Book Explorer',
-          theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+          title: 'Book Explorer',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.orangeAccent,
+              primary: Colors.orange,
+              secondary: Colors.lightBlue,
+              surface: Colors.orange[50]!,
+            ),
+            useMaterial3: true,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.orange,
+              foregroundColor: Colors.white,
+              centerTitle: true,
+              elevation: 0,
+            ),
+            cardTheme: CardThemeData(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              selectedItemColor: Colors.orange,
+              unselectedItemColor: Colors.grey[400],
+              showUnselectedLabels: true,
+              type: BottomNavigationBarType.fixed,
+            ),
+          ),
           home: const MainScreen(),
         ),
       ),
