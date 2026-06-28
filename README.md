@@ -1,8 +1,8 @@
 # Book Explorer
-
-<video src="https://raw.githubusercontent.com/sulistyow/book_catalogue/app_demo.mp4" width="300" controls></video>
-
 Flutter application that allows users to explore, search, and save their favorite books using the public [OpenLibrary API](https://openlibrary.org/).
+
+## Demo
+[![Watch Demo](assets/demo_thumbnail.png)](https://github.com/sulistyow/book_catalogue/raw/main/app_demo.mp4)
 
 ## Features
 
