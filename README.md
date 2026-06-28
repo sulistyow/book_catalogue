@@ -1,5 +1,7 @@
 # Book Explorer
 
+<video src="app_demo.mp4" width="300" controls></video>
+
 Flutter application that allows users to explore, search, and save their favorite books using the public [OpenLibrary API](https://openlibrary.org/).
 
 ## Features
