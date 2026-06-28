@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ class BookApiProvider {
     try {
       final response = await client.get(
         Uri.parse('$BASE_URL/search.json?subject=children&limit=20'),
-      );
+      ).timeout(const Duration(seconds: 20));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -25,6 +26,8 @@ class BookApiProvider {
       }
     } on SocketException {
       throw Exception('No Internet connection');
+    } on TimeoutException {
+      throw Exception('Request timed out');
     } catch (e) {
       throw Exception('Unknown error: $e');
     }
@@ -34,7 +37,7 @@ class BookApiProvider {
     try {
       final response = await client.get(
         Uri.parse('$BASE_URL/search.json?q=${Uri.encodeComponent(query)}&limit=20'),
-      );
+      ).timeout(const Duration(seconds: 20));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -45,6 +48,8 @@ class BookApiProvider {
       }
     } on SocketException {
       throw Exception('No Internet connection');
+    } on TimeoutException {
+      throw Exception('Request timed out');
     } catch (e) {
       throw Exception('Unknown error: $e');
     }
@@ -56,7 +61,7 @@ class BookApiProvider {
       // The API expects https://openlibrary.org/works/OL468431W.json
       final url = '$BASE_URL$key.json';
 
-      final response = await client.get(Uri.parse(url));
+      final response = await client.get(Uri.parse(url)).timeout(const Duration(seconds: 20));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -66,6 +71,8 @@ class BookApiProvider {
       }
     } on SocketException {
       throw Exception('No Internet connection');
+    } on TimeoutException {
+      throw Exception('Request timed out');
     } catch (e) {
       throw Exception('Unknown error: $e');
     }
